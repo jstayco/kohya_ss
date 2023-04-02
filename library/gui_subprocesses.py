@@ -72,7 +72,7 @@ if __name__ == '__main__':
             starting_file = sys.argv[3] if len(sys.argv) > 3 else None
             file_class = sys.argv[4] if len(sys.argv) > 4 else None  # Update this to sys.argv[4]
             gui = TkGui()
-            file_path = gui.open_file_dialog(starting_dir, starting_file, file_class)
+            file_path, canceled = gui.open_file_dialog(starting_dir, starting_file, file_class)
             print(file_path)  # Make sure to print the result
 
         elif mode == 'msgbox':

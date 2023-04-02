@@ -59,8 +59,8 @@ def open_file_dialog(initial_dir, initial_file, file_types="all"):
     if file_types:
         args.append(file_types)
 
-    file_path = subprocess.check_output(args).decode("utf-8").strip()
-    return file_path
+    file_path, canceled = subprocess.check_output(args).decode("utf-8").strip()
+    return file_path, canceled
 
 
 def show_message_box(message, title=""):
