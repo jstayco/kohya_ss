@@ -4,6 +4,8 @@ import time
 
 import gradio as gr
 
+from library.gui_subprocesses import TkGui
+
 tensorboard_proc = None   # I know... bad but heh
 TENSORBOARD = 'tensorboard' if os.name == 'posix' else 'tensorboard.exe'
 
@@ -13,7 +15,7 @@ def start_tensorboard(logging_dir):
 
     if not os.listdir(logging_dir):
         print('Error: log folder is empty')
-        show_message_box(msg='Error: log folder is empty')
+        TkGui.show_message_box(_message='Log folder is empty', _level="error")
         return
 
     run_cmd = [f'{TENSORBOARD}', '--logdir', f'{logging_dir}']

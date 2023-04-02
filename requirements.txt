@@ -4,7 +4,6 @@ altair==4.2.2
 bitsandbytes==0.35.0
 dadaptation==1.5
 diffusers[torch]==0.10.2
-easygui==0.98.3
 einops==0.6.0
 ftfy==6.1.1
 gradio==3.19.1

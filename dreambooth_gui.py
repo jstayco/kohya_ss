@@ -35,6 +35,7 @@ from library.common_utilities import CommonUtilities
 from library.dreambooth_folder_creation_gui import (
     gradio_dreambooth_folder_creation_tab,
 )
+from library.gui_subprocesses import TkGui
 from library.sampler_gui import sample_gradio_config, run_cmd_sample
 from library.tensorboard_gui import (
     gradio_tensorboard,
@@ -249,7 +250,7 @@ def open_configuration(
             else:
                 print("Invalid configuration file.")
                 my_data = {}
-                show_message_box("Invalid configuration file.")
+                TkGui.show_message_box(_message="Invalid configuration file.", _level="error")
     else:
         file_path = original_file_path
         my_data = {}
@@ -327,24 +328,24 @@ def train_model(
         min_snr_gamma,
 ):
     if pretrained_model_name_or_path == '':
-        show_message_box('Source model information is missing')
+        TkGui.show_message_box(_message='Source model information is missing', _level="error")
         return
 
     if train_data_dir == '':
-        show_message_box('Image folder path is missing')
+        TkGui.show_message_box(_message='Image folder path is missing', _level="error")
         return
 
     if not os.path.exists(train_data_dir):
-        show_message_box('Image folder does not exist')
+        TkGui.show_message_box(_message='Image folder does not exist', _level="error")
         return
 
     if reg_data_dir != '':
         if not os.path.exists(reg_data_dir):
-            show_message_box('Regularisation folder does not exist')
+            TkGui.show_message_box(_message='Regularisation folder does not exist', _level="error")
             return
 
     if output_dir == '':
-        show_message_box('Output folder path is missing')
+        TkGui.show_message_box(_message='Output folder path is missing', _level="error")
         return
 
     if check_if_model_exist(output_name, output_dir, save_model_as):

@@ -4,6 +4,7 @@ import subprocess
 import gradio as gr
 
 from .common_gui_functions import get_folder_path, add_pre_postfix
+from .gui_subprocesses import TkGui
 
 PYTHON = 'python3' if os.name == 'posix' else './venv/Scripts/python.exe'
 
@@ -27,11 +28,11 @@ def caption_images(
 
     # Check for images_dir_input
     if train_data_dir == '':
-        show_message_box('Image folder is missing...')
+        TkGui.show_message_box(_message='Image folder is missing.', _level="error")
         return
 
     if caption_file_ext == '':
-        show_message_box('Please provide an extension for the caption files.')
+        TkGui.show_message_box(_message='Please provide an extension for the caption files.', _level="error")
         return
 
     print(f'Captioning files in {train_data_dir}...')

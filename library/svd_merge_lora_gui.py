@@ -6,6 +6,7 @@ import gradio as gr
 from .common_gui_functions import (
     get_file_path, get_saveasfile_path,
 )
+from .gui_subprocesses import TkGui
 
 folder_symbol = '\U0001f4c2'  # 📂
 refresh_symbol = '\U0001f504'  # 🔄
@@ -27,20 +28,20 @@ def svd_merge_lora(
 ):
     # Check for caption_text_input
     if lora_a_model == '':
-        show_message_box('Invalid model A file')
+        TkGui.show_message_box(_message='Invalid model A file.', _level="error")
         return
 
     if lora_b_model == '':
-        show_message_box('Invalid model B file')
+        TkGui.show_message_box(_message='Invalid model B file.', _level="error")
         return
 
     # Check if source model exist
     if not os.path.isfile(lora_a_model):
-        show_message_box('The provided model A is not a file')
+        TkGui.show_message_box(_message='The provided model A is not a file.', _level="error")
         return
 
     if not os.path.isfile(lora_b_model):
-        show_message_box('The provided model B is not a file')
+        TkGui.show_message_box(_message='The provided model B is not a file.', _level="error")
         return
 
     ratio_a = ratio

@@ -11,6 +11,16 @@ from library.common_utilities import CommonUtilities
 class TkGui:
     def __init__(self):
         self.file_types = None
+        self.message_type = {
+            "warning": messagebox.showwarning,
+            "error": messagebox.showerror,
+            "info": messagebox.showinfo,
+            "question": messagebox.askquestion,
+            "okcancel": messagebox.askokcancel,
+            "retrycancel": messagebox.askretrycancel,
+            "yesno": messagebox.askyesno,
+            "yesnocancel": messagebox.askyesnocancel
+        }
 
     def open_file_dialog(self, initial_dir=None, initial_file=None, file_types="all"):
         with tk_context():
@@ -45,21 +55,10 @@ class TkGui:
 
         return save_file_path
 
-    def show_message_box(_message, _title="Message", _level="info"):
+    def show_message_box(self, _message='', _title="Message", _level="info"):
         with tk_context():
-            message_type = {
-                "warning": messagebox.showwarning,
-                "error": messagebox.showerror,
-                "info": messagebox.showinfo,
-                "question": messagebox.askquestion,
-                "okcancel": messagebox.askokcancel,
-                "retrycancel": messagebox.askretrycancel,
-                "yesno": messagebox.askyesno,
-                "yesnocancel": messagebox.askyesnocancel
-            }
-
-            if _level in message_type:
-                message_type[_level](_title, _message)
+            if _level in self.message_type:
+                self.message_type[_level](_title, _message)
             else:
                 messagebox.showinfo(_title, _message)
 

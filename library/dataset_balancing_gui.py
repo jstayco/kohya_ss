@@ -2,9 +2,9 @@ import os
 import re
 
 import gradio as gr
-from easygui import boolbox
 
-from .common_gui_functions import get_folder_path
+from common_gui_functions import get_folder_path
+from library.gui_subprocesses import TkGui
 
 
 # def select_folder():
@@ -16,17 +16,16 @@ from .common_gui_functions import get_folder_path
 
 
 def dataset_balancing(concept_repeats, folder, insecure):
-
     if not concept_repeats > 0:
         # Display an error message if the total number of repeats is not a valid integer
-        show_message_box('Please enter a valid integer for the total number of repeats.')
+        TkGui.show_message_box(_message='Please enter a valid integer for the total number of repeats.', _level="error")
         return
 
     concept_repeats = int(concept_repeats)
 
     # Check if folder exist
     if folder == '' or not os.path.isdir(folder):
-        show_message_box('Please enter a valid folder for balancing.')
+        TkGui.show_message_box(_message='Please enter a valid folder for balancing.', _level="error")
         return
 
     pattern = re.compile(r'^\d+_.+$')
@@ -62,7 +61,7 @@ def dataset_balancing(concept_repeats, folder, insecure):
                     )
                 else:
                     repeats = 0
-                subdir = subdir[match.end() :]
+                subdir = subdir[match.end():]
             else:
                 if not images == 0:
                     repeats = max(1, round(concept_repeats / images))
@@ -88,15 +87,15 @@ def dataset_balancing(concept_repeats, folder, insecure):
                 f'Skipping folder {subdir} because it does not match kohya_ss expected syntax...'
             )
 
-    show_message_box('Dataset balancing completed...')
+    TkGui.show_message_box(_message='Dataset balancing completed.', _title="Completed")
 
 
 def warning(insecure):
     if insecure:
-        if boolbox(
-            f'WARNING!!! You have asked to rename non kohya_ss <num>_<text> folders...\n\nAre you sure you want to do that?',
-            choices=('Yes, I like danger', 'No, get me out of here'),
-        ):
+        result = TkGui.show_message_box(
+            _message=f'WARNING!!! You have asked to rename non kohya_ss <num>_<text> folders...\n\nAre you sure you want to do that?',
+            _level="yesno", title="Large number of folders detected.")
+        if result == 'yes':
             return True
         else:
             return False

@@ -6,6 +6,7 @@ import gradio as gr
 from .common_gui_functions import (
     get_file_path,
 )
+from .gui_subprocesses import TkGui
 
 PYTHON = 'python3' if os.name == 'posix' else './venv/Scripts/python.exe'
 folder_symbol = '\U0001f4c2'  # 📂
@@ -19,12 +20,12 @@ def verify_lora(
 ):
     # verify for caption_text_input
     if lora_model == '':
-        show_message_box('Invalid model A file')
+        TkGui.show_message_box(_message='Invalid model A file.', _level="error")
         return
 
     # verify if source model exist
     if not os.path.isfile(lora_model):
-        show_message_box('The provided model A is not a file')
+        TkGui.show_message_box(_message='The provided model A is not a file.', _level="error")
         return
 
     run_cmd = [

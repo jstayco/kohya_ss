@@ -4,46 +4,47 @@ import subprocess
 import gradio as gr
 
 from .common_gui_functions import get_file_path, get_saveasfile_path
+from .gui_subprocesses import TkGui
 
 PYTHON = 'python3' if os.name == 'posix' else './venv/Scripts/python.exe'
 folder_symbol = '\U0001f4c2'  # 📂
 refresh_symbol = '\U0001f504'  # 🔄
 save_style_symbol = '\U0001f4be'  # 💾
-document_symbol = '\U0001F4C4'   # 📄
+document_symbol = '\U0001F4C4'  # 📄
 
 
 def resize_lora(
-    model,
-    new_rank,
-    save_to,
-    save_precision,
-    device,
-    dynamic_method,
-    dynamic_param,
-    verbose,
+        model,
+        new_rank,
+        save_to,
+        save_precision,
+        device,
+        dynamic_method,
+        dynamic_param,
+        verbose,
 ):
     # Check for caption_text_input
     if model == '':
-        show_message_box('Invalid model file')
+        TkGui.show_message_box(_message='Invalid model file.', _level="error")
         return
 
     # Check if source model exist
     if not os.path.isfile(model):
-        show_message_box('The provided model is not a file')
+        TkGui.show_message_box(_message='The provided model is not a file.', _level="error")
         return
 
     if dynamic_method == 'sv_ratio':
         if float(dynamic_param) < 2:
-            show_message_box(
-                f'Dynamic parameter for {dynamic_method} need to be 2 or greater...'
-            )
+            TkGui.show_message_box(
+                _message='Dynamic parameter for {dynamic_method} need to be 2 or greater.',
+                _level="error")
             return
 
     if dynamic_method == 'sv_fro' or dynamic_method == 'sv_cumulative':
         if float(dynamic_param) < 0 or float(dynamic_param) > 1:
-            show_message_box(
-                f'Dynamic parameter for {dynamic_method} need to be between 0 and 1...'
-            )
+            TkGui.show_message_box(
+                _message='Dynamic parameter for {dynamic_method} need to be between 0 and 1.',
+                _level="error")
             return
 
     # Check if save_to end with one of the defines extension. If not add .safetensors.
@@ -53,7 +54,7 @@ def resize_lora(
     if device == '':
         device = 'cuda'
 
-    run_cmd = f'{PYTHON} "{os.path.join("networks","resize_lora.py")}"'
+    run_cmd = f'{PYTHON} "{os.path.join("networks", "resize_lora.py")}"'
     run_cmd += f' --save_precision {save_precision}'
     run_cmd += f' --save_to {save_to}'
     run_cmd += f' --model {model}'

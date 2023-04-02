@@ -5,7 +5,6 @@ from contextlib import contextmanager
 import tkinter as tk
 from tkinter import filedialog, Tk
 
-import easygui
 import gradio as gr
 
 from library.common_utilities import CommonUtilities
@@ -79,11 +78,11 @@ def check_if_model_exist(output_name, output_dir, save_model_as):
         ckpt_folder = os.path.join(output_dir, output_name)
         if os.path.isdir(ckpt_folder):
             msg = f'A diffuser model with the same name {ckpt_folder} already exists. Do you want to overwrite it?'
-            if not easygui.ynbox(msg, 'Overwrite Existing Model?'):
-                print(
-                    'Aborting training due to existing model with same name...'
-                )
+            result = TkGui.show_message_box(_message=_msg, _title='Overwrite Existing Model?', _level="yesno")
+            if result == 'yes':
                 return True
+            else:
+                print('Aborting training due to existing model with same name.')
     elif save_model_as in ['ckpt', 'safetensors']:
         ckpt_file = os.path.join(output_dir, output_name + '.' + save_model_as)
         if os.path.isfile(ckpt_file):

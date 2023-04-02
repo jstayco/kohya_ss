@@ -4,6 +4,7 @@ import shutil
 import gradio as gr
 
 from .common_gui_functions import get_folder_path
+from .gui_subprocesses import TkGui
 
 
 def copy_info_to_Folders_tab(training_folder):
@@ -40,12 +41,12 @@ def dreambooth_folder_preparation(
 
     # Check for instance prompt
     if util_instance_prompt_input == '':
-        show_message_box('Instance prompt missing...')
+        TkGui.show_message_box(_message='Instance prompt missing.', _level="error")
         return
 
     # Check for class prompt
     if util_class_prompt_input == '':
-        show_message_box('Class prompt missing...')
+        TkGui.show_message_box(_message='Class prompt missing.', _level="error")
         return
 
     # Create the training_dir path

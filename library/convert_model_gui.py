@@ -5,6 +5,7 @@ import subprocess
 import gradio as gr
 
 from .common_gui_functions import get_folder_path, get_file_path
+from .gui_subprocesses import TkGui
 
 folder_symbol = '\U0001f4c2'  # 📂
 refresh_symbol = '\U0001f504'  # 🔄
@@ -23,7 +24,7 @@ def convert_model(
 ):
     # Check for caption_text_input
     if source_model_type == '':
-        show_message_box('Invalid source model type')
+        TkGui.show_message_box(_message='Invalid source model type', _level="error")
         return
 
     # Check if source model exist
@@ -32,14 +33,14 @@ def convert_model(
     elif os.path.isdir(source_model_input):
         print('The provided model is a folder')
     else:
-        show_message_box('The provided source model is neither a file nor a folder')
+        TkGui.show_message_box(_message='The provided source model is neither a file nor a folder.', _level="error")
         return
 
     # Check if source model exist
     if os.path.isdir(target_model_folder_input):
         print('The provided model folder exist')
     else:
-        show_message_box('The provided target folder does not exist')
+        TkGui.show_message_box(_message='The provided target folder does not exist.', _level="error")
         return
 
     run_cmd = f'{PYTHON} "tools/convert_diffusers20_original_sd.py"'

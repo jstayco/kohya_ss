@@ -6,6 +6,7 @@ import gradio as gr
 from .common_gui_functions import (
     get_file_path, get_saveasfile_path,
 )
+from .gui_subprocesses import TkGui
 
 folder_symbol = '\U0001f4c2'  # 📂
 refresh_symbol = '\U0001f504'  # 🔄
@@ -35,20 +36,20 @@ def extract_lycoris_locon(
 ):
     # Check for caption_text_input
     if db_model == '':
-        show_message_box('Invalid finetuned model file')
+        TkGui.show_message_box('Invalid finetuned model file.', _level="error")
         return
 
     if base_model == '':
-        show_message_box('Invalid base model file')
+        TkGui.show_message_box(_message='Invalid base model file.', _level="error")
         return
 
     # Check if source model exist
     if not os.path.isfile(db_model):
-        show_message_box('The provided finetuned model is not a file')
+        TkGui.show_message_box(_message='The provided finetuned model is not a file.', _level="error")
         return
 
     if not os.path.isfile(base_model):
-        show_message_box('The provided base model is not a file')
+        TkGui.show_message_box(_message='The provided base model is not a file', _level="error")
         return
 
     run_cmd = f'{PYTHON} "{os.path.join("tools","lycoris_locon_extract.py")}"'

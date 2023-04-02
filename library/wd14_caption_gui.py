@@ -4,6 +4,7 @@ import subprocess
 import gradio as gr
 
 from .common_gui_functions import get_folder_path
+from .gui_subprocesses import TkGui
 
 
 def replace_underscore_with_space(folder_path, file_extension):
@@ -16,21 +17,23 @@ def replace_underscore_with_space(folder_path, file_extension):
             with open(file_path, 'w') as file:
                 file.write(new_file_content)
 
+
 def caption_images(
-    train_data_dir, caption_extension, batch_size, thresh, replace_underscores
+        train_data_dir, caption_extension, batch_size, thresh, replace_underscores
 ):
     # Check for caption_text_input
     # if caption_text_input == "":
-    #     show_message_box("Caption text is missing...")
+    #     TkGui.show_message_box(_message="Caption text is missing.", _level="error")
     #     return
 
     # Check for images_dir_input
     if train_data_dir == '':
-        show_message_box('Image folder is missing...')
+        TkGui.show_message_box(_message='Image folder is missing.', _level="error")
         return
 
     if caption_extension == '':
-        show_message_box('Please provide an extension for the caption files.')
+        TkGui.show_message_box(_message='Please provide an extension for the caption files.',
+                               _level="error")
         return
 
     print(f'Captioning files in {train_data_dir}...')
@@ -47,7 +50,7 @@ def caption_images(
         os.system(run_cmd)
     else:
         subprocess.run(run_cmd)
-        
+
     if replace_underscores:
         replace_underscore_with_space(train_data_dir, caption_extension)
 
