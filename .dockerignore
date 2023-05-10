@@ -6,3 +6,7 @@ dataset/
 __pycache__/
 venv/
 logs
+build
+.vscode
+.idea
+.github

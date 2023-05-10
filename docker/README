@@ -1,0 +1,32 @@
+Docker compose commands for the different modes:
+Cloud:
+docker-compose --profile cloud -f docker-compose.base.yml -f docker-compose.cloud.yml up --build
+Public:
+docker-compose --profile public -f docker-compose.base.yml -f docker-compose.public.yml up --build
+Private:
+docker-compose --profile private -f docker-compose.base.yml -f docker-compose.private.yml up --build
+
+To run in debug mode, just add "VERBOSITY=3 " without the quotations to the beginning of the command as such:
+VERBOSITY=3 docker-compose --profile private -f docker-compose.base.yml -f docker-compose.private.yml up --build
+
+To 
+GPU_DRIVER=nvidia GPU_DEVICE_ID=1 docker-compose -f docker-compose.base.yml up
+
+Building dockerfile for your platform:
+docker build --build-arg GPU=Nvidia -t my-image .
+docker build --build-arg GPU=AMD -t my-image .
+docker build --build-arg GPU=Apple -t my-image .
+
+Publish Docker Image Workflow
+Store your Docker Hub username and password as secrets in your GitHub repository. Go to the "Settings" tab in your GitHub repository, click on "Secrets" in the left sidebar, and add two new secrets: DOCKER_USERNAME and DOCKER_PASSWORD.
+
+Docker has GPU access built-in starting with version Docker-ce 19.03.
+sudo apt-get install -y docker nvidia-container-toolkit
+Running the Nvidia docker container docs: https://docs.nvidia.com/deeplearning/frameworks/user-guide/index.html#runcont
+
+Running the AMD ROCm Docker container: https://github.com/RadeonOpenCompute/ROCm-docker/blob/master/quick-start.md
+
+arm64v8/ubuntu:23.04 is what we run for Apple. It will not have GPU support, CPU only.
+
+Publishing images on Github via workflows.
+https://docs.github.com/en/actions/publishing-packages/publishing-docker-images

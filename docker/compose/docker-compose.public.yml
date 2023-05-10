@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  kohya-ss-gui:
+    environment:
+      SHARE: "true"
+    ports:
+      - "0.0.0.0:7860:7860"

@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  kohya-ss-gui:
+    container_name: kohya-ss-gui
+    image: ${IMAGE_NAME:-kohya-ss-gui-nvidia:latest}
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile
+    tty: true
+    ipc: host
+    environment:
+      CLI_ARGS: ${CLI_ARGS:-""}
+      SAFETENSORS_FAST_GPU: 1
+      VERBOSITY: ${VERBOSITY:-0}
+      GPU_DRIVER: nvidia
+      GPU_DEVICE_ID: 0
+    tmpfs:
+      - /tmp
+    volumes:
+      - ${DATASET_VOLUME:-/data/kohya_ss/dataset}:/dataset  # Make volume mount points configurable
+      - ${USER_CACHE_VOLUME:-/data/kohya_ss/.cache/user}:/home/appuser/.cache
+      - ${TRITON_CACHE_VOLUME:-/data/kohya_ss/.cache/triton}:/home/appuser/.triton
+      - ${CONFIG_CACHE_VOLUME:-/data/kohya_ss/.cache/config}:/app/appuser/.config
+      - ${NV_CACHE_VOLUME:-/data/kohya_ss/.cache/nv}:/home/appuser/.nv
+      - ${KERAS_CACHE_VOLUME:-/data/kohya_ss/.cache/keras}:/home/appuser/.keras
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: ${GPU_DRIVER}
+              device_ids: ["${GPU_DEVICE_ID}"]
+              capabilities: [gpu]

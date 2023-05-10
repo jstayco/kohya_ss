@@ -1,0 +1,88 @@
+# Kohya SS Official Dockerfile
+
+# Build arguments
+ARG GPU=Nvidia
+
+# Base image
+FROM nvcr.io/nvidia/pytorch:23.04-py3 as Nvidia
+FROM rocm/pytorch:rocm5.5_ubuntu20.04_py3.8_pytorch_1.11.0 as AMD
+FROM arm64v8/ubuntu:23.04 as Apple
+
+FROM ${GPU} as base
+
+# Maintainer and contact information
+LABEL maintainer="Jeremy Tayco"
+
+# Kohya SS version
+LABEL kohya_ss.version="1.0.0"
+
+# Labels for software dependencies
+LABEL software.python.version="3.10.11"
+
+# Additional metadata
+LABEL description="This Dockerfile automates the setup, installation, and deployment of Kohya SS, including Python 3.10, Git, and other dependencies."
+LABEL usage="Provide usage instructions or refer to your project's documentation."
+
+# Set non-interactive frontend
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Set the timezone
+RUN ln -fs /usr/share/zoneinfo/$(curl https://ipapi.co/timezone) /etc/localtime
+
+# Docker build arguments
+ARG branch
+ARG git_repo
+ARG log_dir
+ARG torch_version
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the project files one folder up from $projectRoot/docker into /app into WORKDIR in container.
+COPY ../ .
+
+# Remove .git folder
+RUN rm -rf .git
+
+# Setup Kohya_SS
+RUN ./setup.sh --setup-only --skip-space-check --update \
+    $(if [ -n "$branch" ]; then echo "--branch=$branch"; fi) \
+    $(if [ -n "$git_repo" ]; then echo "--git-repo=$git_repo"; fi) \
+    $(if [ -n "$log_dir" ]; then echo "--log-dir=$log_dir"; fi) \
+    $(if [ -n "$torch_version" ]; then echo "--torch-version=$torch_version"; fi)
+
+# Set python 3.10 as default
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 3 && \
+    update-alternatives --config python3
+
+# Install wheel. We need it to build the kohya_ss library from source.
+RUN python3 -m pip install wheel
+
+# Create a new user
+RUN useradd -m -s /bin/bash kohya_ss
+
+# Multi-stage build to reduce the final image size
+FROM base as final
+
+# Set the working directory
+WORKDIR /app
+
+# Copy only necessary artifacts from the base stage
+COPY --from=base --chown=kohya_ss /app /app
+
+# Add the timezone script
+COPY timezone.sh /timezone.sh
+
+# Set the CMD
+CMD ["/bin/sh", "/app/docker/scripts/timezone.sh"]
+
+# Set environment variables
+ENV LD_PRELOAD=libtcmalloc.so
+ENV PATH="$PATH:/home/kohya_ss/.local/bin"
+
+# Set the user
+USER kohya_ss
+
+# ENTRYPOINT launcher.py with all arguments as optional.
+ENTRYPOINT ["/bin/sh", "/app/docker/entrypoint.sh"]
+    
