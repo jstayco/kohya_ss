@@ -238,7 +238,7 @@ launcher.py --no-setup
 <details>
 <summary>setup.ps1</summary>
 
-```bash
+```
 -File <String>
     The full path to a custom configuration file.
 
@@ -272,7 +272,7 @@ launcher.py --no-setup
 -SkipSpaceCheck [<SwitchParameter>]
     Skip the 10Gb minimum storage space check.
     
-- TorchVersion <Int32>
+-TorchVersion <Int32>
     Configure the major version of Torch.
 
 -Verbosity <Int32>
@@ -307,7 +307,8 @@ launcher.py --no-setup
 Please note that setup.bat is interactive by default to facilitate an easy experience for Windows GUI users.
 Therefore, this is the only script that --interactive has the opposite behavior and disables interactive mode.
 
-```commandline
+```
+--automated        : Disable Interactive mode and run in automated mode.
 --branch           : Specify the Git branch to use. Default is 'master'.
 --dir              : Specify the working directory. Default is the directory of the script.
 --file             : Specify the configuration file to be processed.
@@ -334,7 +335,7 @@ Therefore, this is the only script that --interactive has the opposite behavior 
 <details>
 <summary>setup.sh and launcher.py</summary>
 
-```bash
+```
 -b BRANCH, --branch=BRANCH    Select which branch of kohya to check out on new installs.
 -d DIR, --dir=DIR             The full path you want kohya_ss installed to.
 -f FILE, --file=FILE          Load a custom configuration file.
@@ -364,7 +365,7 @@ Therefore, this is the only script that --interactive has the opposite behavior 
 These options are passed through to kohya_gui.py. Kohya_gui.py will also accept them directly.
 Use them in the same manner is the above arguments:
 
-```bash
+```
 -f FILE, --file=FILE          Load a custom configuration file.
 -l LOG_DIR, --log-dir=LOG_DIR Set the custom log directory for kohya_ss.
 --listen or -l: The IP address to listen on (default: 127.0.0.1).

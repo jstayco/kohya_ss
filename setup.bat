@@ -120,7 +120,7 @@ if /i "%arg%"=="--headless" (
     shift
     goto arg_loop
 )
-if /i "%arg%"=="--interactive" (
+if /i "%arg%"=="--automated" (
     set Interactive=0
     rem echo Interactive set to !Interactive!
     shift
@@ -270,13 +270,13 @@ goto :preparePowerShellArgs
 echo Usage: my_script.bat [OPTIONS]
 echo.
 echo OPTIONS:
+echo --automated        : Disable Interactive mode and run in automated mode.
 echo --branch           : Specify the Git branch to use. Default is 'master'.
 echo --dir              : Specify the working directory. Default is the directory of the script.
 echo --file             : Specify the configuration file to be processed.
 echo --git-repo         : Specify the Git repository URL. Default is 'https://github.com/bmaltais/kohya_ss.git'.
 echo --headless         : Headless mode will not display the native windowing toolkit. Useful for remote deployments.
 echo --help             : Display this help.
-echo --interactive      : Disable Interactive mode and run in automated mode.
 echo --log-dir          : Set the custom log directory for kohya_ss.
 echo --no-setup         : Skip the setup process.
 echo --repair           : This runs the installation repair operations. These could take a few minutes to run.
